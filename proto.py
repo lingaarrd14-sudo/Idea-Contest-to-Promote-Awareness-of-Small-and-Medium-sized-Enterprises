@@ -9,7 +9,7 @@ def create_color_text_mosaic(image_path, font_path, text_list, output_path):
     try:
         # RGBA로 불러와서 투명도(Alpha) 채널까지 활용합니다.
         img = Image.open(image_path).convert('RGBA')
-        img = ImageEnhance.Color(img).enhance(1)    # 채도 1.5배 상승
+        img = ImageEnhance.Color(img).enhance(1.5)    # 채도 1.3배 상승
         img = ImageEnhance.Contrast(img).enhance(1) # 대비 1.5배 상승
         img = img.resize((A3_WIDTH, A3_HEIGHT))
     except FileNotFoundError:
@@ -17,11 +17,11 @@ def create_color_text_mosaic(image_path, font_path, text_list, output_path):
         return
 
     # 3. 캔버스 생성 (완전 흰색 도화지)
-    canvas = Image.new('RGB', (A3_WIDTH, A3_HEIGHT), color=(255, 255, 255))
+    canvas = Image.new('RGB', (A3_WIDTH, A3_HEIGHT), color=(253, 251, 247))
     draw = ImageDraw.Draw(canvas)
 
     # 4. 폰트 설정 (모든 글자 크기 절대 동일)
-    font_size = 12
+    font_size = 11
     try:
         font = ImageFont.truetype(font_path, font_size)
     except IOError:
@@ -53,26 +53,33 @@ def create_color_text_mosaic(image_path, font_path, text_list, output_path):
                 center_y = min(y + (line_spacing // 2), A3_HEIGHT - 1)
                 r, g, b, a = img.getpixel((center_x, center_y))
 
-                # 투명하거나 하얀 배경이면 회색, 아니면 원본 색상!
                 if a < 128 or (r > 240 and g > 240 and b > 240):
-                    text_color = (220, 220, 220)
+                    text_color = (220, 215, 212)
                 else:
-                    text_color = (r, g, b)
+                    # --- 🎨 여기서부터 메인 피사체 색상을 멱살 잡고 진하게! ---
+                    # 1. 메인 텍스트(검은색 톤) 강제 블랙: 원본이 칙칙한 회색이어도 완전 까맣게!
+                    if r < 90 and g < 90 and b < 90:
+                        text_color = (0, 0, 0) # 순도 100% 검정
+                        
+                     
+                    # 3. 거북선 몸체(나무색 등): 원래 색상보다 무조건 30% 더 진하게 톤다운
+                    else:
+                        text_color = (int(r), int(g ), int(b ))
                 
-                # 🎨 '한 글자'만 해당 색상으로 캔버스에 찍음
+                # 결정된 색상으로 도화지에 글자 찍기
                 draw.text((x, y), char, font=font, fill=text_color)
             
                 # 찍은 글자의 폭만큼만 x좌표를 미세하게 이동
                 x += char_w 
             
             # 단어가 하나 끝나면 띄어쓰기 여백(반 칸) 추가
-            x += int(font_size * 0.3)
+            x += int(font_size * 0.2)
             word_idx += 1
         
         y += line_spacing
 
     # 7. 5MB 용량 제한을 위한 JPEG 고화질 저장
-    canvas.save(output_path, format="JPEG", quality=80, optimize=True)
+    canvas.save(output_path, format="PNG", quality=100, optimize=True, progressive=True)
     print(f"✅ 저장 완료! 파일 확인해 봐: {output_path}")
 
 # ==========================================
@@ -90,6 +97,6 @@ if __name__ == "__main__":
     my_sme_list = pd.read_csv("D:\\gitTest\\cleaned_corpname.csv")["기업명"].tolist()  
     
     # 4. 결과물 파일명
-    my_output = "a3_text_mosaic_prototype.jpg"
+    my_output = "a3_text_mosaic_prototype.png"
 
     create_color_text_mosaic(my_mask_image, my_font_path, my_sme_list, my_output)
