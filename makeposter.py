@@ -9,7 +9,7 @@ def create_color_text_mosaic_with_coords(image_path, font_path, text_list, outpu
     # 2. 이미지 준비
     try:
         img = Image.open(image_path).convert('RGBA')
-        img = ImageEnhance.Color(img).enhance(1.5)
+        img = ImageEnhance.Color(img).enhance(1)
         img = ImageEnhance.Contrast(img).enhance(1)
         img = img.resize((A3_WIDTH, A3_HEIGHT))
     except FileNotFoundError:
@@ -21,7 +21,7 @@ def create_color_text_mosaic_with_coords(image_path, font_path, text_list, outpu
     draw = ImageDraw.Draw(canvas)
 
     # 4. 폰트 설정
-    font_size = 12.5
+    font_size = 12
     try:
         font = ImageFont.truetype(font_path, font_size)
     except IOError:
@@ -58,10 +58,12 @@ def create_color_text_mosaic_with_coords(image_path, font_path, text_list, outpu
                 r, g, b, a = img.getpixel((center_x, center_y))
 
                 # 색상 결정 로직
-                if a < 128 or (r > 240 and g > 240 and b > 240):
-                    text_color = (180, 170, 160)
+                if y < A3_HEIGHT // 2 and (r > 250 and g > 250 and b > 250):
+                    text_color = (r-(255-180), g-(255-170), b-(255-160))
+                elif a < 128 or (r > 90 and g > 90 and b > 90):
+                    text_color = (r-(255-180), g-(255-170), b-(255-160))
                 else:
-                    if r < 90 and g < 90 and b < 90:
+                    if r < 50 and g < 50 and b < 50:
                         text_color = (0, 0, 0) # 순도 100% 검정
                     else:
                         text_color = (int(r), int(g), int(b))
@@ -72,7 +74,7 @@ def create_color_text_mosaic_with_coords(image_path, font_path, text_list, outpu
                 # 찍은 글자의 폭만큼만 x좌표를 미세하게 이동
                 x += char_w*0.85
             
-            # 💡 단어 하나 그리기가 끝나면, 해당 단어의 좌표 정보를 딕셔너리로 저장합니다.
+  
             word_width = x - start_x # 최종 x에서 시작 x를 빼서 단어의 총 가로 길이를 구함
             
             word_coordinates.append({
@@ -103,13 +105,13 @@ def create_color_text_mosaic_with_coords(image_path, font_path, text_list, outpu
 # ==========================================
 if __name__ == "__main__":
     # 1. 사용할 마스크 이미지 경로
-    my_mask_image = "D:\\gitTest\\poster.jpeg" 
+    my_mask_image = "poster.png" 
     
     # 2. 폰트 경로
-    my_font_path = "C:/Windows/Fonts/malgunbd.ttf" 
+    my_font_path = "malgunbd.ttf" 
     
     # 3. 중소기업 데이터 로드
-    my_sme_list = pd.read_csv("D:\\gitTest\\통합_기업명단_상세추적.csv")["기업명"].tolist()  
+    my_sme_list = pd.read_csv("통합_기업명단_상세추적.csv")["기업명"].tolist()  
     
     # 4. 결과물 저장 경로 설정
     my_output_image = "a3_text_mosaic_prototype.png"
