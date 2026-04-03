@@ -48,7 +48,7 @@ if search_query:
             draw = ImageDraw.Draw(img_copy)
 
             # 포스터 전체 뷰에서 멀리서도 보이게 큰 빨간색 가이드 박스 생성
-            highlight_padding = 80
+            highlight_padding = 90
             draw.rectangle(
                 [x - highlight_padding, y - highlight_padding, x + w + highlight_padding, y + h + highlight_padding],
                 outline="red",
