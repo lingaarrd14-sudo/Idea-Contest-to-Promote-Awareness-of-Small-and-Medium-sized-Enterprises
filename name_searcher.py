@@ -14,8 +14,11 @@ def load_data():
 def load_image():
     return Image.open("a3_text_mosaic_prototype.png").convert("RGBA")
 
-st.title("거북선 텍스트 모자이크 - 우리 기업 찾기")
-st.markdown("포스터를 구성하는 약 30,000개의 사명 중, 찾고 싶은 기업명을 입력하세요.")
+st.title("우리 기업 이름 찾기")
+st.markdown("""
+🔍 찾고 싶은 기업명을 입력하세요. 고용노동부 선정 강소기업, 중소벤처기업부 선정 혁신형중소기업 명단을 활용했습니다.  
+중복사명이 많거나 사명이 짧은 기업을 우선적으로 수록하였습니다. 혹시 찾는 기업이 없더라도 넓은 마음으로 이해해 주시면 감사하겠습니다. 🙏
+""")
 
 # 파일 존재 여부 체크
 try:
@@ -26,7 +29,7 @@ except FileNotFoundError:
     st.stop()
 
 # 검색 UI
-search_query = st.text_input("🔍 부분 일치 검색 지원,  띄워쓰기❌  \n중복 결과가 많을 경우 사명을 더 구체적으로 입력해주세요. ", placeholder="예: 대진엔지니어링 ")
+search_query = st.text_input("부분 일치 검색 지원, 띄워쓰기❌", placeholder="예: 대진엔지니어링 ")
 
 if search_query:
     # 부분 일치하는 모든 기업 검색
