@@ -15,7 +15,7 @@ def load_image():
     return Image.open("a3_text_mosaic_prototype.png").convert("RGBA")
 
 st.title("거북선 텍스트 모자이크 - 우리 기업 찾기")
-st.markdown("포스터를 구성하는 약 30,000개 이상의 사명 중, 찾고 싶은 기업명을 입력하세요.")
+st.markdown("포스터를 구성하는 약 30,000개의 사명 중, 찾고 싶은 기업명을 입력하세요.")
 
 # 파일 존재 여부 체크
 try:
