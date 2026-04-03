@@ -14,8 +14,8 @@ def load_data():
 def load_image():
     return Image.open("a3_text_mosaic_prototype.png").convert("RGBA")
 
-st.title("🐢 거북선 텍스트 모자이크 - 우리 기업 찾기")
-st.markdown("포스터를 구성하는 약 34,000개 이상의 사명 중, 찾고 싶은 기업명을 입력하세요.")
+st.title("거북선 텍스트 모자이크 - 우리 기업 찾기")
+st.markdown("포스터를 구성하는 약 30,000개 이상의 사명 중, 찾고 싶은 기업명을 입력하세요.")
 
 # 파일 존재 여부 체크
 try:
@@ -26,7 +26,7 @@ except FileNotFoundError:
     st.stop()
 
 # 검색 UI
-search_query = st.text_input("🔍 부분 일치 검색 지원, 띄워쓰기❌  \n중복 결과가 많을 경우 사명을 더 구체적으로 입력해주세요. ", placeholder="예: 대진엔지니어링 ")
+search_query = st.text_input("🔍 부분 일치 검색 지원,  띄워쓰기❌  \n중복 결과가 많을 경우 사명을 더 구체적으로 입력해주세요. ", placeholder="예: 대진엔지니어링 ")
 
 if search_query:
     # 부분 일치하는 모든 기업 검색

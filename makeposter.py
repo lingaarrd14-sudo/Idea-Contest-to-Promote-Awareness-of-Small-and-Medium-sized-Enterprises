@@ -9,7 +9,7 @@ def create_color_text_mosaic_with_coords(image_path, font_path, text_list, outpu
     # 2. 이미지 준비
     try:
         img = Image.open(image_path).convert('RGBA')
-        img = ImageEnhance.Color(img).enhance(1)
+        img = ImageEnhance.Color(img).enhance(1.1)
         img = ImageEnhance.Contrast(img).enhance(1)
         img = img.resize((A3_WIDTH, A3_HEIGHT))
     except FileNotFoundError:
@@ -21,7 +21,7 @@ def create_color_text_mosaic_with_coords(image_path, font_path, text_list, outpu
     draw = ImageDraw.Draw(canvas)
 
     # 4. 폰트 설정
-    font_size = 12
+    font_size = 13
     try:
         font = ImageFont.truetype(font_path, font_size)
     except IOError:
@@ -32,7 +32,7 @@ def create_color_text_mosaic_with_coords(image_path, font_path, text_list, outpu
     word_coordinates = [] # 💡 좌표를 담을 빈 리스트 생성
     word_idx = 0
     y = 0
-    line_spacing = int(font_size)*0.95
+    line_spacing = int(font_size)*0.98
 
     print("⏳ 텍스트 모자이크 생성 및 좌표 추출 중... (시간이 조금 걸릴 수 있습니다)")
 
@@ -86,7 +86,7 @@ def create_color_text_mosaic_with_coords(image_path, font_path, text_list, outpu
             })
             
             # 단어가 하나 끝나면 띄어쓰기 여백(반 칸) 추가
-            x += font_size * 0.17
+            x += font_size * 0.16
             word_idx += 1
         
         y += line_spacing
